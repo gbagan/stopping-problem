@@ -1,4 +1,6 @@
 <script lang="ts">
+    import Button from "./Button.svelte";
+
   type Props = {
     startGame: () => void;
   }
@@ -25,7 +27,7 @@
 
     <p>🧮 Il existe une vraie stratégie mathématique pour maximiser tes chances… sauras-tu la trouver ?</p>
 
-    <button onclick={startGame}>Commencer</button>
+    <Button onclick={startGame}>Commencer</Button>
   </div>
 </div>
 
@@ -65,27 +67,5 @@
 
   ul {
     padding-left: 1rem;
-  }
-
-  button {
-    display: block;
-    margin: 0 auto;
-    width: 13rem;
-    background-color: var(--violet-500);
-    color: var(--slate-100);
-    font-size: 1.5rem;
-    font-weight: 600;
-    font-family: var(--handwritten);
-    padding: 1rem 2rem;
-    border-radius: 1rem;
-    border: none;
-    box-shadow: var(--shadow-md);
-    transition: all 200ms ease;
-    cursor: pointer;
-  
-    &:hover, &:active {
-      background-color: var(--violet-600);
-      box-shadow: var(--shadow-lg);
-    }
   }
 </style>

@@ -6,14 +6,7 @@
 }
 
 :root {
-  --bg: var(--slate-950);
-  --card: var(--slate-800);
-  --accent1: var(--sky-400);
-  --accent2: var(--violet-400);
-  --accent3: var(--rose-400);
-  --accent4: var(--emerald-400);
   --text: var(--slate-100);
-  --muted: var(--slate-400);
   --handwritten: "Shantell Sans";
 
   color: var(--text);

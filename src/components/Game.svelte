@@ -3,8 +3,9 @@
   import { COLORS } from "../lib/constants";
   import Gauge, { type GiftSlot } from "./Gauge.svelte";
   import Gift from "./Gift.svelte";
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
   import AnimatedBackground from "./AnimatedBackgroundConfetti.svelte";
+    import Strategy from "./Strategy.svelte";
 
   const NTH_BEST = [
     "meilleur",
@@ -23,7 +24,10 @@
   let choice = $state<number | null>(null);
   let gifts = [40, 25, 31, 2, 70, 1, 60, 50];
   let flashColor = $state('transparent');
-  let flashing   = $state(false);
+  let flashing = $state(false);
+  let dialog = $state.raw(false);
+  let dialogEl: HTMLDialogElement;
+
 
   const giftPosition = $derived(times(rejectedGifts, i =>
     0.5 * (8 - rejectedGifts) + count(gifts, (star, j) => j < rejectedGifts && star > gifts[i])
@@ -73,6 +77,17 @@
     flashing = true;
     await new Promise(r => setTimeout(r, 300));
     flashing = false;
+  }
+
+  async function openDialog() {
+    dialog = true;
+    await tick();
+    dialogEl.showModal(); 
+  }
+
+  function closeDialog() {
+    dialog = false;
+    dialogEl.close();
   }
 
   onMount(() => {
@@ -191,7 +206,7 @@
             {#if i === choice}
               <image
                 x="-50"
-                href="./src/images/check.svg"
+                href="./check.svg"
                 width="50"
                 height="50"
               />
@@ -237,11 +252,16 @@
           <p>{msg}! Tu as fait le {NTH_BEST[position]} choix</p>
         </div>
         <button class="ui-button restart" onclick={restart}>Recommencer</button>
-        <button class="ui-button tips">Astuces</button>
+        <button class="ui-button tips" onclick={openDialog}>Astuces</button>
       {/if}
     </div>
   </div>
 </div>
+<dialog class="dialog" bind:this={dialogEl}>
+  {#if dialog}
+    <Strategy {closeDialog} />
+  {/if}
+</dialog>
 
 <style>
   .app {
@@ -392,6 +412,29 @@
     justify-content: center;
     font-size: 3rem;
     font-family: var(--handwritten);
+  }
+
+  .dialog {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: max-content;
+    background: #0D0B28;
+    border: 1.5px solid #534AB7;
+    border-radius: 20px;
+    padding: 0;
+    overflow: hidden;
+    animation: popIn .35s cubic-bezier(.34,1.56,.64,1);
+  }
+
+  .dialog::backdrop {
+    background-color: rgb(107 114 128 / 0.7);
+  }
+
+  @keyframes popIn {
+    from { transform: translate(-50%, -50%) scale(.8); opacity: 0; }
+    to   { transform: translate(-50%, -50%) scale(1);  opacity: 1; }
   }
 
   @keyframes bounce {
