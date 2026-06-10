@@ -14,8 +14,15 @@
   --accent4: var(--emerald-400);
   --text: var(--slate-100);
   --muted: var(--slate-400);
+  --handwritten: "Shantell Sans";
 
   color: var(--text);
   font-family: 'Nunito Sans', sans-serif;
   font-size: 2vmin;
+}
+
+body, html {
+  user-select: none;
+  touch-action: none;
+  background-color: var(--slate-700);
 }
