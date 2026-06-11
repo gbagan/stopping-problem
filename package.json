@@ -19,6 +19,7 @@
     "vite": "^8.0.12"
   },
   "dependencies": {
+    "@gbagan/rng": "^0.1.0",
     "embla-carousel-svelte": "^8.6.0"
   }
 }

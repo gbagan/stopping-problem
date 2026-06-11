@@ -3,9 +3,11 @@
   import Game from "./components/Game.svelte";
   import Rules from "./components/Rules.svelte";
   import { fade } from "svelte/transition";
+  import { xoroshiro128Plus } from "@gbagan/rng";
 
   let phase: "home" | "rules" | "game" = $state.raw("home");
   let tid: number;
+  const rng = xoroshiro128Plus();
 
   function startGame() {
     phase = "game";
@@ -42,7 +44,7 @@
   </div>
 {:else}
   <div transition:fade>
-    <Game />
+    <Game {rng} />
   </div>
 {/if}
 

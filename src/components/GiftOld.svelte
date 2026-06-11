@@ -4,14 +4,15 @@
   import { sleep, times } from '@gbagan/utils';
 
   interface Props {
-    color: string;
+    box: string;
+    ribbon: string;
     value: number;
     canOpen: boolean;
     showStars: boolean;
     onreveal?: () => void;
   }
 
-  let { color, value, showStars, canOpen, onreveal }: Props = $props();
+  let { box, ribbon, value, showStars, canOpen, onreveal }: Props = $props();
 
   // Phase : 'idle' | 'shaking' | 'opening' | 'revealed'
   let phase = $state<'idle' | 'shaking' | 'opening' | 'revealed'>('idle');
@@ -82,10 +83,24 @@
     y="0"
     class={{shaking}}
   >
-    <image
-      href="./gift-box-{color}.avif"
-      width={48*1.5}
-    />
+    <!-- Ombre au sol -->
+    <ellipse cx="33" cy="72" rx="32" ry="5" fill="#000" opacity="0.25"/>
+
+    <!-- ── CORPS (boîte sans couvercle) ── -->
+    <!-- Face Arriere -->
+    <rect x="14" y="12" width="52" height="42" rx="3" fill={box}/> 
+    <!-- Face gauche -->
+    <polygon points="0,20 14,12 14,54 0,62" fill="color-mix(in srgb, {box} 75%, black)"/> 
+    <!-- Face avant -->
+    <rect x="0" y="20" width="52" height="42" rx="3" fill={box}/>
+    <!-- Face droite -->
+    <polygon points="52,20 66,12 66,54 52,62" fill="color-mix(in srgb, {box} 75%, black)"/>
+    <!-- Ruban vertical -->
+    <rect x="22" y="20" width="8" height="42" fill={ribbon}/>
+    <!-- Ruban horizontal corps -->
+    <rect x="0" y="36" width="52" height="8" fill={ribbon}/>
+    <!-- Ruban côté droit corps -->
+    <polygon points="52,36 66,28 66,36 52,44" fill={ribbon} opacity="0.7"/>
 
     <!-- ── ÉTOILES qui jaillissent ── -->
     {#each stars as s}
@@ -116,15 +131,19 @@
 
     <!-- ── COUVERCLE (translate vers le haut) ── -->
     <g transform="translate(0, {lidY.current})" opacity={lidOpacity.current}>
-      <g>
-        <image
-          href="./gift-lid-{color}.avif"
-          width={48*1.5}
-          y="-13"
-          x="-1"
-          transform="scale(1.02 0.66)"
-        />
-      </g>
+      <!-- Face avant du couvercle -->
+      <rect x="0" y="8" width="52" height="14" rx="3" fill={box}/>
+      <!-- Dessus -->
+      <polygon points="0,8 52,8 66,0 14,0" fill="color-mix(in srgb, {box} 80%, white)"/>
+      <!-- Face droite couvercle -->
+      <polygon points="52,8 66,0 66,12 52,20" fill="color-mix(in srgb, {box} 75%, black)"/>
+      <!-- Ruban horizontal couvercle -->
+      <rect x="0" y="14" width="52" height="6" fill={ribbon}/>
+      <!-- Ruban vertical couvercle -->
+      <rect x="22" y="8" width="8" height="14" fill={ribbon}/>
+      <!-- Nœud -->
+      <ellipse cx="26" cy="4" rx="9" ry="6" fill={ribbon}/>
+      <ellipse cx="26" cy="4" rx="5" ry="3" fill="color-mix(in srgb, {ribbon} 75%, black)"/>
     </g>
   </svg>
 </g>

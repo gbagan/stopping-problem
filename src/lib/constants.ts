@@ -1,5 +1,7 @@
+/*
 import type { GiftColor } from './types';
- 
+
+
 export const COLORS: GiftColor[] = [
   { box: '#e63946', ribbon: '#ffd60a' },
   { box: '#2196f3', ribbon: '#ff9800' },
@@ -10,3 +12,6 @@ export const COLORS: GiftColor[] = [
   { box: '#f06292', ribbon: '#fff9c4' },
   { box: '#c0c0c0', ribbon: '#6e6e6e' }
 ];
+*/
+
+export const COLORS = ["red", "blue", "green", "purple", "cyan", "orange", "violet", "gray"];

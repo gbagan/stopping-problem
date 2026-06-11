@@ -1,6 +1,7 @@
 <script lang="ts">
   import checkImg from "../images/check.svg";
   import { count, range, times, sleep } from "@gbagan/utils";
+  import type { RandomGenerator } from "@gbagan/rng";
   import { COLORS } from "../lib/constants";
   import Gauge, { type GiftSlot } from "./Gauge.svelte";
   import Gift from "./Gift.svelte";
@@ -19,15 +20,32 @@
     "pire"
   ];
 
+  type Props = {
+    rng: RandomGenerator;
+  }
+
+  let { rng }: Props = $props(); 
+
   let phase: "0" | "1" | "open" | "choice" | "take" | "accept" = $state("0");
   let partyId = $state(0);
   let rejectedGifts = $state(0);
   let choice = $state<number | null>(null);
-  let gifts = [40, 25, 31, 2, 70, 1, 60, 50];
-  let flashColor = $state('transparent');
-  let flashing = $state(false);
+  let flashColor = $state.raw('transparent');
+  let flashing = $state.raw(false);
   let dialog = $state.raw(false);
   let dialogEl: HTMLDialogElement;
+
+  function generateGifts() {
+    const start = rng.int(2, 200);
+    const maxStep = rng.int(10, 100);
+    let current = start;
+    return rng.shuffle(times(8, () => {
+      current += rng.int(1, maxStep);
+      return current;
+    }));
+  }
+
+  let gifts = $state.raw(generateGifts());
 
 
   const giftPosition = $derived(times(rejectedGifts, i =>
@@ -67,6 +85,7 @@
   }
 
   function restart() {
+    gifts = generateGifts();
     choice = null;
     partyId++;
     rejectedGifts = 0;
@@ -150,8 +169,8 @@
               : i === rejectedGifts && phase === "take"
               ? "translate(300px, 200px) scale(3)" 
               : i === rejectedGifts && ["1", "open", "choice"].includes(phase) 
-              ? "translate(300px, 550px) scale(1.5)"
-              : "translate(-100px, 550px) scale(1.5)"
+              ? "translate(280px, 550px) scale(1.5)"
+              : "translate(-120px, 550px) scale(1.5)"
             }
             style:transition={
               i < rejectedGifts ? "transform 600ms linear"
@@ -161,8 +180,7 @@
             }
           >
             <Gift
-              box={COLORS[i].box}
-              ribbon={COLORS[i].ribbon}
+              color={COLORS[i]}
               value={gifts[i]}
               canOpen={i === rejectedGifts && phase === "open"}
               onreveal={() => phase = "choice"}
