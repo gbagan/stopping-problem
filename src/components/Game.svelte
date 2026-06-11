@@ -1,11 +1,12 @@
 <script lang="ts">
+  import checkImg from "../images/check.svg";
   import { count, range, times, sleep } from "@gbagan/utils";
   import { COLORS } from "../lib/constants";
   import Gauge, { type GiftSlot } from "./Gauge.svelte";
   import Gift from "./Gift.svelte";
   import { onMount, tick } from "svelte";
   import AnimatedBackground from "./AnimatedBackgroundConfetti.svelte";
-    import Strategy from "./Strategy.svelte";
+  import Strategy from "./Strategy.svelte";
 
   const NTH_BEST = [
     "meilleur",
@@ -206,7 +207,7 @@
             {#if i === choice}
               <image
                 x="-50"
-                href="./check.svg"
+                href={checkImg}
                 width="50"
                 height="50"
               />
