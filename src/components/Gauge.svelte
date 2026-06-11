@@ -3,42 +3,43 @@
  
   export interface GiftSlot {
     state: GiftState;
-    value?: number;
+    value: number;
   }
  
   interface Props {
     gifts: GiftSlot[];
-    total?: number;
   }
  
-  let { gifts, total = 8 }: Props = $props();
+  let { gifts }: Props = $props();
  
   const currentIndex = $derived(gifts.findIndex(g => g.state === 'current'));
   const bestRejected = $derived(
-    Math.max(0, ...gifts.filter(g => g.state === 'rejected' && g.value !== undefined).map(g => g.value!))
+    Math.max(0, ...gifts.filter(g => g.state === 'rejected').map(g => g.value))
+  );
+  const best = $derived(
+    Math.max(0, ...gifts.filter(g => g.state !== 'upcoming').map(g => g.value))
   );
 </script>
  
 <div class="gauge">
   <div class="slots">
-    {#each { length: total } as _, i}
-      {@const gift = gifts[i] ?? { state: 'upcoming' }}
-      {@const isCurrent = gift.state === 'current'}
-      {@const isBest = gift.state === 'rejected' && gift.value === bestRejected && bestRejected > 0}
+    {#each gifts as {state, value}, i}
+      {@const isCurrent = state === 'current'}
+      {@const isBest = value === best}
       <div
         class="slot"
         class:current={isCurrent}
-        class:rejected={gift.state === 'rejected'}
-        class:taken={gift.state === 'taken'}
-        class:upcoming={gift.state === 'upcoming'}
+        class:rejected={state === 'rejected'}
+        class:taken={state === 'taken'}
+        class:upcoming={state === 'upcoming'}
         class:best={isBest}
       >
         <div class="gift-icon">
-          {#if gift.state === 'upcoming'}
+          {#if state === 'upcoming'}
             <span class="icon faded">🎁</span>
-          {:else if gift.state === 'current'}
+          {:else if state === 'current'}
             <span class="icon pulse">🎁</span>
-          {:else if gift.state === 'taken'}
+          {:else if state === 'taken'}
             <span class="icon">🎁</span>
           {:else}
             <span class="icon dim">🎁</span>
@@ -46,15 +47,15 @@
         </div>
  
         <div class="gift-value">
-          {#if gift.state === 'upcoming'}
+          {#if state === 'upcoming'}
             <span class="unknown">?</span>
-          {:else if gift.state === 'current'}
-            <span class="value current-value">{gift.value} ⭐</span>
-          {:else if gift.state === 'taken'}
-            <span class="value taken-value">✓ {gift.value}</span>
+          {:else if state === 'current'}
+            <span class="value current-value">{value} ⭐</span>
+          {:else if state === 'taken'}
+            <span class="value taken-value">✓ {value}</span>
           {:else}
             <span class="value rejected-value" class:best-value={isBest}>
-              {isBest ? '★' : '✗'} {gift.value}
+              {isBest ? '★' : '✗'} {value}
             </span>
           {/if}
         </div>
@@ -140,6 +141,7 @@
     0%, 100% { transform: scale(1); }
     50%       { transform: scale(1.12); }
   }
+
   .icon.pulse {
     display: inline-block;
     animation: pulse 1.6s ease-in-out infinite;

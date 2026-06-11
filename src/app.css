@@ -8,9 +8,10 @@
 :root {
   --text: var(--slate-100);
   --handwritten: "Shantell Sans";
+  --night: #0d0b28;
 
   color: var(--text);
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: system-ui;
   font-size: 2vmin;
 }
 

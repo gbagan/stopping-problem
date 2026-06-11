@@ -35,10 +35,10 @@
   ));
 
   const giftSlots: GiftSlot[] = $derived(gifts.map((gift, i) => (
-    i === rejectedGifts && ["choice", "take"].includes(phase) ? { state: 'current', value: gift }
+    i === choice ? { state: 'taken', value: gift }
+    : i === rejectedGifts && ["choice", "take"].includes(phase) ? { state: 'current', value: gift }
     : i < rejectedGifts ? { state: 'rejected', value: gift }
-    : i === choice ? { state: 'taken', value: gift }
-    : { state: 'upcoming' }
+    : { state: 'upcoming', value: gift }
   )));
 
   async function start() {
@@ -94,33 +94,6 @@
   onMount(() => {
     start();
   });
-
-/*
-{#snippet gift(color: number)}
-  <rect x="0" y="8" width="52" height="54" rx="3" fill="#c1121f"/>
-  <polygon points="52,8 66,0 66,54 52,62" fill="#8a0e16"/>
-  <polygon points="0,8 52,8 66,0 14,0" fill="#e63946"/>
-  <rect x="0" y="28" width="52" height="8" fill="#ffd60a"/>
-  <rect x="22" y="8" width="8" height="54" fill="#ffd60a"/>
-  <polygon points="52,28 66,20 66,36 52,36" fill="#ffd60a" opacity="0.7"/>
-  <ellipse cx="26" cy="4" rx="9" ry="6" fill="#ffd60a"/>
-  <ellipse cx="26" cy="4" rx="5" ry="3" fill="#e6b800"/>
-  <ellipse cx="30" cy="64" rx="26" ry="4" fill="#000" opacity="0.3"/>
-{/snippet}
-
-{#snippet giftView(box: string, ribbon: string)}
-  <rect x="0" y="8" width="52" height="54" rx="3" fill={box}/>
-  <polygon points="52,8 66,0 66,54 52,62" fill="color-mix(in srgb, {box} 75%, black)"/>
-  <polygon points="0,8 52,8 66,0 14,0" fill="color-mix(in srgb, {box} 80%, white)"/>
-  <rect x="0" y="28" width="52" height="8" fill={ribbon}/>
-  <rect x="22" y="8" width="8" height="54" fill={ribbon}/>
-  <polygon points="52,28 66,20 66,36 52,36" fill={ribbon} opacity="0.7"/>
-  <ellipse cx="26" cy="4" rx="9" ry="6" fill={ribbon} />
-  <ellipse cx="26" cy="4" rx="5" ry="3" fill="color-mix(in srgb, {ribbon} 75%, black)"/>
-  <ellipse cx="30" cy="64" rx="26" ry="4" fill="#000" opacity="0.3"/>
-{/snippet}
-
-*/
 </script>
 
 {#snippet svg()}
@@ -228,7 +201,7 @@
     {@render svg()}
     <div class="overlay">
       <div class="gauge-container">
-        <Gauge gifts={giftSlots} total={8} />
+        <Gauge gifts={giftSlots} />
       </div>
       {#if phase === "choice"}
         <div class="choice-text">
@@ -421,9 +394,9 @@
     top: 50%;
     transform: translate(-50%, -50%);
     width: max-content;
-    background: #0D0B28;
-    border: 1.5px solid #534AB7;
-    border-radius: 20px;
+    background: var(--indigo-950);
+    border: 0.125rem solid var(--indigo-600);
+    border-radius: 1.25rem;
     padding: 0;
     overflow: hidden;
     animation: popIn .35s cubic-bezier(.34,1.56,.64,1);
