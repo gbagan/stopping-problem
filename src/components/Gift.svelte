@@ -75,49 +75,48 @@
     height="80"
     x="0"
     y="0"
-    class={{shaking}}
   >
-    <image
-      href="./gift-box-{color}.avif"
-      width={48*1.5}
-    />
-
-    <!-- ── ÉTOILES qui jaillissent ── -->
-    {#each stars as s}
-      <circle cx={s.x} cy={s.y} r={s.r} fill="#fbbf24"
-        style="animation: starPop 0.5s {s.delay}ms both"
-      />
-    {/each}
-
-    <!-- ── SCORE -->
-    {#if (phase === 'revealed' || phase === 'opening') && showStars}
-      <g transform="translate(26, 38)" style="transform-origin: 26px 38px">
-        <text
-          x="80" y="0"
-          text-anchor="middle"
-          dominant-baseline="central"
-          font-size="24"
-          font-weight="700"
-          fill="#fbbf24"
-          style="
-            transform: scale({scoreScale.current});
-            opacity: {scoreOpacity.current};
-            transform-origin: 0 0;
-            filter: drop-shadow(0 0 4px rgba(251,191,36,0.6));
-          "
-        >{value}⭐</text>
-      </g>
-    {/if}
-
-    <!-- ── COUVERCLE (translate vers le haut) ── -->
-    <g transform="translate(0, {lidY.current})" opacity={lidOpacity.current}>
+    <g class={{shaking}}>
       <image
-        href="./gift-lid-{color}.avif"
+        href="./gift-box-{color}.avif"
         width={48*1.5}
-        y="-13"
-        x="-1"
-        transform="scale(1.02 0.66)"
       />
+
+      {#each stars as s}
+        <circle cx={s.x} cy={s.y} r={s.r} fill="#fbbf24"
+          style="animation: starPop 0.5s {s.delay}ms both"
+        />
+      {/each}
+
+      {#if (phase === 'revealed' || phase === 'opening') && showStars}
+        <g transform="translate(26, 38)" style="transform-origin: 26px 38px">
+          <text
+            x="80" y="0"
+            text-anchor="middle"
+            dominant-baseline="central"
+            font-size="24"
+            font-weight="700"
+            fill="#fbbf24"
+            style="
+              transform: scale({scoreScale.current});
+              opacity: {scoreOpacity.current};
+              transform-origin: 0 0;
+              filter: drop-shadow(0 0 4px rgba(251,191,36,0.6));
+            "
+          >{value}⭐</text>
+        </g>
+      {/if}
+
+      <!-- ── COUVERCLE (translate vers le haut) ── -->
+      <g transform="translate(0, {lidY.current})" opacity={lidOpacity.current}>
+        <image
+          href="./gift-lid-{color}.avif"
+          width={48*1.5}
+          y="-13"
+          x="-1"
+          transform="scale(1.02 0.66)"
+        />
+      </g>
     </g>
   </svg>
 </g>
