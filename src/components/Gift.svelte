@@ -17,8 +17,8 @@
   let phase = $state<'idle' | 'shaking' | 'opening' | 'revealed'>('idle');
 
   // Couvercle : monte vers le haut
-  const lidY      = new Tween(0,   { duration: 500, easing: cubicOut });
-  const lidOpacity = new Tween(1,  { duration: 300, easing: cubicOut });
+  const lidY = new Tween(0, { duration: 500, easing: cubicOut });
+  const lidOpacity = new Tween(1, { duration: 300, easing: cubicOut });
 
   // Score : apparaît depuis le centre
   const scoreScale   = new Tween(0, { duration: 400, easing: backOut });
@@ -145,6 +145,7 @@
 
   .shaking {
     animation: shake 0.6s ease-in-out;
+    transform-box: fill-box;
     transform-origin: center bottom;
   }
 </style>
