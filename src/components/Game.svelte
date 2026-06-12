@@ -261,12 +261,16 @@
     align-items: center;
     justify-content: center;
     width: 100vw;
-    min-height: 100vh;
+    height: 100dvh;
   }
 
   .container {
     position: relative;
     aspect-ratio: 4 / 3;
+    width: min(100vw, 100dvh * 4 / 3);
+    height: min(100dvh, 100vw * 3 / 4);
+    max-height: 100dvh;
+    max-width: 100vw;
   }
 
   .flash {

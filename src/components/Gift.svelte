@@ -31,8 +31,7 @@
   let shaking = $state(false);
 
   async function open() {
-    if (!canOpen) return;
-    if (phase !== 'idle') return;
+    if (!canOpen || phase !== 'idle') return;
 
     // 1. Shake
     phase = 'shaking';
@@ -64,10 +63,6 @@
 
     onreveal?.();
   }
-
-  // Couvercle séparé du corps : top face + side face
-  // Corps  = boîte sans le dessus (body)
-  // Lid    = dessus + face avant du couvercle (suit lidY)
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -116,15 +111,13 @@
 
     <!-- ── COUVERCLE (translate vers le haut) ── -->
     <g transform="translate(0, {lidY.current})" opacity={lidOpacity.current}>
-      <g>
-        <image
-          href="./gift-lid-{color}.avif"
-          width={48*1.5}
-          y="-13"
-          x="-1"
-          transform="scale(1.02 0.66)"
-        />
-      </g>
+      <image
+        href="./gift-lid-{color}.avif"
+        width={48*1.5}
+        y="-13"
+        x="-1"
+        transform="scale(1.02 0.66)"
+      />
     </g>
   </svg>
 </g>
